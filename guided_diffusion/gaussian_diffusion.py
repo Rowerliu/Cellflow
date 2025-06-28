@@ -168,6 +168,7 @@ class GaussianDiffusion:
                 / (1.0 - self.alphas_cumprod)
         )
 
+
     def q_mean_variance(self, x_start, t):
         """
         Get the distribution q(x_t | x_0).
@@ -184,6 +185,7 @@ class GaussianDiffusion:
             self.log_one_minus_alphas_cumprod, t, x_start.shape
         )
         return mean, variance, log_variance
+
 
     def q_sample(self, x_start, t, noise=None):
         """
@@ -204,6 +206,7 @@ class GaussianDiffusion:
                 + _extract_into_tensor(self.sqrt_one_minus_alphas_cumprod, t, x_start.shape)
                 * noise
         )
+
 
     def q_posterior_mean_variance(self, x_start, x_t, t):
         """
@@ -883,7 +886,6 @@ class GaussianDiffusion:
                 )
                 yield out
                 image = out["sample"]
-
 
 
     def _vb_terms_bpd(

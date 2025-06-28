@@ -32,7 +32,7 @@ def main():
 
     dist_util.setup_dist()
 
-    folder = r'01_results\20250627_ROSE\TTFF_cfg_ddim100_a10'  # fixme
+    folder = args.result_dir
     pathlib.Path(folder).mkdir(parents=True, exist_ok=True)
 
     i = args.source
@@ -52,19 +52,13 @@ def main():
     logger.log("time_start:", time_start)
     logger.log(f"reading models for synthetic data...")
 
-    source_dir = r'H:\LZY\02_Code\ADM\01_result\20250618_ROSE-r640_diff-512_cfg_blur_10w\True'  # fixme
+    source_dir = os.path.join(args.model_dir, str(args_source.use_new_attention_order))  # fixme
     source_model, diffusion = read_model_and_diffusion(args_source, source_dir)
 
-    target_dir = r'H:\LZY\02_Code\ADM\01_result\20250618_ROSE-r640_diff-512_cfg_blur_10w\False'  # fixme
+    target_dir = os.path.join(args.model_dir, str(args_target.use_new_attention_order))  # fixme
     target_model, _ = read_model_and_diffusion(args_target, target_dir)
 
-    def model_source(x, t, y=None):
-        assert y is not None
-        return source_model(x, t, y if args.class_cond else None)
-
-    def model_target(x, t, y=None):
-        assert y is not None
-        return target_model(x, t, y if args.class_cond else None)
+    weight = args.weight
 
     # Copies the source dataset
     logger.log("copying source dataset.")
@@ -94,21 +88,31 @@ def main():
         deterministic=True
     )
 
-    bs = 0
-
     source_data_dir = os.path.join(args.data_dir, source_domain)
     lens = len(os.listdir(source_data_dir))
     # lens = 8
 
+    # if resume from length point
+    resume = 0
+
     # define amount (m) of progressive images
     amount = 10
 
+    bs = 0
     for k, (source, extra) in enumerate(data):
         if bs < lens//args.batch_size:
+            if bs < resume:
+                bs = bs + 1
+                continue
             if int(extra["y"]) == args.source:
 
                 source = source.to(dist_util.dev())
+                # source_path_k = os.path.join(image_subfolder, 'source_np')
+                # pathlib.Path(source_path_k).mkdir(parents=True, exist_ok=True)
+                # source_path_k = os.path.join(source_path_k, f'source_{k:04d}.npy')
+                # np.save(source_path_k, source.cpu().numpy())
                 sources.append(source.cpu().numpy())
+
                 # save source image
                 source_for_img = ((source + 1) * 127.5).clamp(0, 255).to(th.uint8)
                 save_tensor_as_images(source_for_img, source_img_dir, "source", k)
@@ -119,12 +123,13 @@ def main():
                 target_y = dict(y=th.tensor(target_y_list).to(dist_util.dev()))
 
                 out_fourier_magnitude_list = diffusion.fourier_frequency_list_loop(
-                    model_source,
+                    source_model,
                     source,
                     model_kwargs=source_y,
                     clip_denoised=args.clip_denoised,
                     device=dist_util.dev(),
                     progress=True,
+                    weight=weight,
                 )
 
                 diffway_list = get_adaptive_list(out_fourier_magnitude_list, amount)
@@ -146,12 +151,13 @@ def main():
                     # First, use DDIM to encode to latents.
                     logger.log("encoding the source images.")
                     noise = diffusion.ddim_reverse_sample_loop(
-                        model_source,
+                        source_model,
                         source,
                         clip_denoised=args.clip_denoised,
                         model_kwargs=source_y,
                         device=dist_util.dev(),
                         progress=True,
+                        weight=weight,
                         amount=amount,
                         diffway_start=diffway_start,
                         diffway_end=diffway_end,
@@ -164,7 +170,7 @@ def main():
                     time_noise = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                     logger.log("time_noise:", time_noise)
                     target = diffusion.ddim_sample_loop(
-                        model_target,
+                        target_model,
                         (args.batch_size, 3, args.image_size, args.image_size),
                         noise=noise,
                         clip_denoised=args.clip_denoised,
@@ -172,6 +178,7 @@ def main():
                         device=dist_util.dev(),
                         progress=True,
                         eta=args.eta,
+                        weight=weight,
                         amount=amount,
                         diffway_end=diffway_end,
                     )
@@ -290,11 +297,17 @@ def save_tensor_as_images(tensor, save_dir, prefix, batch_idx, step_idx=None):
 def create_argparser(type=None):
     defaults_all = dict()
     defaults = dict(
-        data_dir=r"E:\01_LZY\01_Data\z12_Chaoyang\02_resize\r320",  # todo
-        clip_denoised=True,
+        # folder to save flow images
+        result_dir=r"F:\12_Code\02_Zhanglab\04_Cellflow\02_Flow\01_result\20250627_ROSE\TTFF_cfg_ddim100_a10",  # fixme
+        # folder of flow model
+        model_dir=r"F:\12_Code\02_Zhanglab\04_Cellflow\01_Diffusion\01_result\20250618_ROSE-r640_diff-512_cfg_blur_10w",
+        # folder of flow data
+        data_dir=r"F:\13_Data\03_Pathology\a04_Cellflow\02_classification\01_ROSE\train",  # todo
+
+        clip_denoised=False,
         batch_size=1,
         eta=0.0,
-        image_size=256,
+        image_size=512,
         class_cond=True,
         weight=1.8,  # weight for classifier-free guidance
         num_classes=2,

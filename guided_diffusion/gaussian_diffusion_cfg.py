@@ -400,7 +400,7 @@ class GaussianDiffusion:
         """
         classifier-free guidance
         """
-        model_kwargs['cfg'] = True  # use clf-free guidance
+        model_kwargs['cfg'] = True  # use classifier-free guidance
         model_kwargs['threshold'] = -1  # make sure disable training mode
 
         dict_ = model_kwargs.copy()
@@ -630,8 +630,10 @@ class GaussianDiffusion:
             device=None,
             progress=False,
             eta=0.0,
-            weight=-1,
             sample_steps=None,
+            weight=-1,
+            amount=None,
+            diffway_end=None,
     ):
         """
         Generate samples from the model using DDIM.
@@ -651,7 +653,9 @@ class GaussianDiffusion:
                 progress=progress,
                 eta=eta,
                 sample_steps=sample_steps,
-                weight=weight
+                weight=weight,
+                amount=amount,
+                diffway_end=diffway_end,
         ):
             final = sample
         return final["sample"]
@@ -669,7 +673,9 @@ class GaussianDiffusion:
             progress=False,
             eta=0.0,
             sample_steps=None,
-            weight=-1
+            weight=-1,
+            amount=None,
+            diffway_end=None,
     ):
         """
         Use DDIM to sample from the model and yield intermediate samples from
@@ -685,7 +691,9 @@ class GaussianDiffusion:
         else:
             img = th.randn(*shape, device=device)
 
-        if sample_steps is None:
+        if amount is not None:
+            indices = list(range(diffway_end))[::-1]
+        elif sample_steps is None:
             indices = list(range(self.num_timesteps))[::-1]
         else:
             indices = list(range(sample_steps))[::-1]
@@ -774,6 +782,9 @@ class GaussianDiffusion:
             eta=0.0,
             sample_steps=None,
             weight=-1,
+            amount=None,
+            diffway_start=None,
+            diffway_end=None,
     ):
         """
         XS: Encode image into latent using DDIM ODE.
@@ -791,6 +802,9 @@ class GaussianDiffusion:
                 eta=eta,
                 sample_steps=sample_steps,
                 weight=weight,
+                amount=amount,
+                diffway_start=diffway_start,
+                diffway_end=diffway_end,
         ):
             final = sample
         return final["sample"]
@@ -808,6 +822,9 @@ class GaussianDiffusion:
             eta=0.0,
             sample_steps=None,
             weight=-1,
+            amount=None,
+            diffway_start=None,
+            diffway_end=None,
     ):
         """
         XS: Use DDIM to perform encoding / inference, until isotropic Gaussian.
@@ -816,7 +833,9 @@ class GaussianDiffusion:
             device = next(model.parameters()).device
         shape = image.shape
 
-        if sample_steps is None:
+        if amount is not None:
+            indices = list(range(diffway_start, diffway_end))
+        elif sample_steps is None:
             indices = list(range(self.num_timesteps))
         else:
             indices = list(range(sample_steps))
@@ -829,6 +848,7 @@ class GaussianDiffusion:
 
         for i in indices:
             t = th.tensor([i] * shape[0], device=device)
+
             with th.no_grad():
                 out = self.ddim_reverse_sample(
                     model,
@@ -856,6 +876,7 @@ class GaussianDiffusion:
             device=None,
             progress=False,
             eta=0.0,
+            weight=-1,
     ):
         """
         Calculate the fourier magnitude of image sequences
@@ -872,6 +893,7 @@ class GaussianDiffusion:
                 device=device,
                 progress=progress,
                 eta=eta,
+                weight=weight,
         ):
             out_fourier_magnitude = image_fourier_trans(sample['sample'])
             out_fourier_magnitude_list.append(out_fourier_magnitude)
@@ -1120,6 +1142,3 @@ def _extract_into_tensor(arr, timesteps, broadcast_shape):
     while len(res.shape) < len(broadcast_shape):
         res = res[..., None]
     return res.expand(broadcast_shape)
-
-
-
