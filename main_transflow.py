@@ -33,7 +33,7 @@ def main():
 
     dist_util.setup_dist()
 
-    folder = r'E:\01_LZY\02_Code\04_Cellflow\01_result\20250602_Chaoyang\FFTT_ddim100_a10_classifier\all'  # todo
+    folder = args.result_dir
     pathlib.Path(folder).mkdir(parents=True, exist_ok=True)
 
     i = args.source
@@ -53,14 +53,16 @@ def main():
     logger.log("time_start:", time_start)
     logger.log(f"reading models for synthetic data...")
 
-    source_dir = r'E:\01_LZY\02_Code\02_ADM\01_result\20250528_Chaoyang-r320_diff-256_Blur_10w\False'
+    source_dir = os.path.join(args.model_dir, str(args_source.use_new_attention_order))  # fixme
     source_model, diffusion = read_model_and_diffusion(args_source, source_dir)
 
-    target_dir = r'E:\01_LZY\02_Code\02_ADM\01_result\20250528_Chaoyang-r320_diff-256_Blur_10w\True'
+    target_dir = os.path.join(args.model_dir, str(args_target.use_new_attention_order))  # fixme
     target_model, _ = read_model_and_diffusion(args_target, target_dir)
 
-    classifier_dir = r'E:\01_LZY\02_Code\02_ADM\01_result\20250528_Chaoyang-r320_diff-256_Blur_10w\Classifier'
+    classifier_dir = args.classifier_dir,
     classifier = read_classifier(args, classifier_dir)
+
+    weight = args.weight
 
     def cond_fn(x, t, y=None):
         assert y is not None
@@ -83,7 +85,7 @@ def main():
     logger.log("copying source dataset.")
     source = [int(args.source)]
     target = [int(args.target)]
-    source_to_target_mapping = {s: t for s, t in zip(source, target)}  # todo  cannot transfer to multi-domain once time
+    source_to_target_mapping = {s: t for s, t in zip(source, target)}
 
     source_img_dir = os.path.join(image_subfolder + r'/source_img')
     latent_img_dir = os.path.join(image_subfolder + r'/latent_img')
@@ -111,20 +113,22 @@ def main():
 
     source_data_dir = os.path.join(args.data_dir, source_domain)
     lens = len(os.listdir(source_data_dir))
-    # lens = 8
+
+    # if resume from length point
+    resume = 0
 
     # define amount (m) of progressive images
     amount = 10
 
+    bs = 0
     for k, (source, extra) in enumerate(data):
         if bs < lens//args.batch_size:
+            if bs < resume:
+                bs = bs + 1
+                continue
             if int(extra["y"]) == args.source:
 
                 source = source.to(dist_util.dev())
-                # source_path_k = os.path.join(image_subfolder, 'source_np')
-                # pathlib.Path(source_path_k).mkdir(parents=True, exist_ok=True)
-                # source_path_k = os.path.join(source_path_k, f'source_{k:04d}.npy')
-                # np.save(source_path_k, source.cpu().numpy())
                 sources.append(source.cpu().numpy())
 
                 # save source image
@@ -143,6 +147,7 @@ def main():
                     clip_denoised=args.clip_denoised,
                     device=dist_util.dev(),
                     progress=True,
+                    weight=weight,
                 )
 
                 diffway_list = get_adaptive_list(out_fourier_magnitude_list, amount)
@@ -197,18 +202,7 @@ def main():
                     logger.log(f"finished transition {target.shape}")
 
                     noise = ((noise + 1) * 127.5).clamp(0, 255).to(th.uint8)
-                    # latent_path_k = os.path.join(image_subfolder, 'latent_np')
-                    # pathlib.Path(latent_path_k).mkdir(parents=True, exist_ok=True)
-                    # latent_path_k = os.path.join(
-                    # latent_path_k, f'latent_{k:04d}_{m:04d}.npy')
-                    # np.save(latent_path_k, noise.cpu().numpy())
-
-
                     target = ((target + 1) * 127.5).clamp(0, 255).to(th.uint8)
-                    # target_path_k = os.path.join(image_subfolder, 'target_np')
-                    # pathlib.Path(target_path_k).mkdir(parents=True, exist_ok=True)
-                    # target_path_k = os.path.join(target_path_k, f'target_{k:04d}_{m:04d}.npy')
-                    # np.save(target_path_k, target.cpu().numpy())
 
                     # save latent & target image
                     save_tensor_as_images(noise, latent_img_dir, "latent", bs, diffway_end)
@@ -309,21 +303,31 @@ def save_tensor_as_images(tensor, save_dir, prefix, batch_idx, step_idx=None):
 def create_argparser(type=None):
     defaults_all = dict()
     defaults = dict(
-        data_dir=r"E:\01_LZY\01_Data\z12_Chaoyang\02_resize\r320",  # todo
+        # folder to save flow images
+        result_dir=r".../transflow_images",
+        # folder of trained diffusion model
+        model_dir=r".../diffusion_model_folder",
+        # folder of trained classifier model
+        classifier_dir=r".../classifier_model_folder",
+        # folder of source data
+        data_dir=r".../",
+
         clip_denoised=False,
         batch_size=1,
-        classifier_scale=1.0,
         eta=0.0,
         image_size=256,
         class_cond=True,
-        num_classes=4,
-        out_channels=4,
+        classifier_scale=2.0,  # classifier guidance weight
+        num_classes=4,  # classes of dataset
+        out_channels=4,  # classes of dataset
         timestep_respacing="ddim100",
+        amount=10,
     )
     defaults_all.update(model_and_diffusion_defaults())
     defaults_all.update(classifier_defaults())
     defaults_all.update(defaults)
 
+    # Scale-adaptive Attention Orchestration
     if type == 'source':
         defaults_add = dict(
             use_new_attention_order=False,
