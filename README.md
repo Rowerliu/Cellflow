@@ -1,7 +1,7 @@
 # Cellflow
 
 **Cellflow: Advancing pathological image augmentation from spatial views to temporal trajectories**<br/>
-(In submission)
+(In submission)<br/>
 [Zeyu Liu](https://github.com/Rowerliu), [Tianyi Zhang](https://github.com/sagizty), Yufang He, Bo Wen, Haoran Guo, 
 Peng Zhang, Chenbin Ma, Shangqing Lyu, Yunlu Feng, Yu Zhao, Yueming Jin, Dachun Zhao, Guanglei Zhang<br/>
 [GitHub](https://github.com/Rowerliu/Cellflow)
@@ -23,7 +23,7 @@ Quantitative cellularity analysis provides additional validation of the biologic
 By introducing temporal modeling into pathological data augmentation, Cellflow establishes a paradigm shift from 
 spatial manipulations to biologically grounded temporal trajectories that advances robust model training, 
 rare disease exploration, and educational simulation in computational pathology.
-
+<br/>
 
 ## 🗃️ Usage
 
@@ -60,14 +60,14 @@ python main_transflow.py
 --timestep_respacing='ddim100'
 --amount=10 
 ```
-
+<br/>
 
 ## 📍 Acknowledgements
 This implementation is based on / inspired by:<br/>
 [openai/guided-diffusion](https://github.com/openai/guided-diffusion)<br/>
 [openai/improved-diffusion](https://github.com/openai/improved-diffusion)<br/>
 [suxuann/ddib](https://github.com/suxuann/ddib)
-
+<br/>
 
 ## 🗄️ Enviroments
 A suitable [conda](https://conda.io/) environment named `cellflow` can be created
@@ -77,7 +77,7 @@ and activated with:
 conda env create -f environment.yaml
 conda activate cellflow
 ```
-
+<br/>
 
 ## 🗃️ Materials
 The datasets are listed here:
