@@ -29,17 +29,19 @@ rare disease exploration, and educational simulation in computational pathology.
 
 ### Step1: Prepare data
 Take [MHIST](https://bmirds.github.io/MHIST) data for example:<br/>
-MHIST<br/>
-│<br/>
-├── HP<br/>
-│   ├── HP_0001.png<br/>
-│   ├── ...<br/>
+```
+MHIST
+│
+├── HP
+│   ├── HP_0001.png
+│   ├── ...
 │   └── HP_9999.png<br/>
-│<br/>
-└── SSA<br/>
-    ├── SSA_0001.png<br/>
-    ├── ...<br/>
-    └── SSA_9999.png<br/>
+│
+└── SSA
+    ├── SSA_0001.png
+    ├── ...
+    └── SSA_9999.png
+```
 
 ### Step2: Diffusion model training
 1. Prepare your data<br/>
