@@ -114,3 +114,13 @@ conda activate cellflow
 | ADM         | [Diffusion models beat gans on image synthesis](https://arxiv.org/abs/2105.05233)                         | [link](https://github.com/openai/guided-diffusion)      |
 | LDM         | [High-Resolution Image Synthesis with Latent Diffusion Models](https://arxiv.org/abs/2112.10752)          | [link](https://github.com/CompVis/latent-diffusion)     |
 | DiT         | [Scalable Diffusion Models with Transformers](https://arxiv.org/abs/2212.09748)                           | [link](https://github.com/facebookresearch/DiT)         |
+
+
+### Employ [Unpuzzle](https://github.com/Puzzle-Logic/UnPuzzle) framework for classification backbones:
+
+| Architecture     | Model                                                              |
+|:-----------------|:-------------------------------------------------------------------|
+| CNN-based        | VGG16, VGG19, ResNet, Inception, Xception, MobileNet, EfficientNet |
+| ViT-based        | ViT, SwinT                                                         |
+| Hybrid           | Conformer, CrossFormer                                             |
+| Foundation Model | Virchow2, UNI                                                      |
