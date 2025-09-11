@@ -10,7 +10,7 @@
 Deep learning has advanced pathological image analysis but remains constrained by limited annotated data, 
 especially for fine-grained and rare conditions. While data augmentation alleviates this issue, 
 existing methods are restricted to spatial manipulations that lack biological plausibility and overlook the 
-temporal dynamics of pathological state transition. To address this gap, we propose \textbf{Cellflow}, 
+temporal dynamics of pathological state transition. To address this gap, we propose **Cellflow**, 
 the first temporal-aware generative framework for pathological image augmentation. 
 Cellflow models pathological transition as smooth trajectories on a biological image manifold, 
 generating intermediate states via a stair-based diffusion bridge with classifier-guided probability-flow 
