@@ -2,7 +2,7 @@
 
 **Cellflow: Advancing pathological image augmentation from spatial views to temporal trajectories**<br/>
 (In submission)<br/>
-[Zeyu Liu](https://github.com/Rowerliu), [Tianyi Zhang](https://github.com/sagizty), Yufang He, Bo Wen, Haoran Guo, 
+[Zeyu Liu](https://github.com/Rowerliu), Tianyi Zhang, Yufang He, Bo Wen, Haoran Guo, 
 Peng Zhang, Chenbin Ma, Shangqing Lyu, Yunlu Feng, Yu Zhao, Yueming Jin, Dachun Zhao, Guanglei Zhang<br/>
 [GitHub](https://github.com/Rowerliu/Cellflow)
 
