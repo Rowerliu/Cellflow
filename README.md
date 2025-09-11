@@ -102,7 +102,7 @@ conda activate cellflow
 | Mixup                  | [mixup: Beyond Empirical Risk Minimization](https://arxiv.org/abs/1710.09412)                                                    | [link](https://github.com/facebookresearch/mixup-cifar10) |
 | CutMix                 | [CutMix: Regularization Strategy to Train Strong Classifiers With Localizable Features](https://arxiv.org/abs/1905.04899)        | [link](https://github.com/clovaai/CutMix-PyTorch)         |
 | FMix                   | [FMix: Enhancing Mixed Sample Data Augmentation](https://arxiv.org/abs/2002.12047)                                               | [link](https://github.com/ecs-vlc/FMix)                   |
-| ResizeMix              | [ResizeMix: Mixing Data with Preserved Object Information and True Labels](https://arxiv.org/abs/2012.11101)                     | Null                                                      |
+| ResizeMix              | [ResizeMix: Mixing Data with Preserved Object Information and True Labels](https://arxiv.org/abs/2012.11101)                     | -                                                         |
 | SaliencyMix            | [SaliencyMix: A Saliency Guided Data Augmentation Strategy for Better Regularization](https://arxiv.org/abs/2006.01791)          | [link](https://github.com/SaliencyMix/SaliencyMix)        |
 
 
