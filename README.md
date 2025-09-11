@@ -24,6 +24,16 @@ spatial manipulations to biologically grounded temporal trajectories that advanc
 rare disease exploration, and educational simulation in computational pathology.
 
 
+## 🗄️ Enviroments
+A suitable [conda](https://conda.io/) environment named `cellflow` can be created
+and activated with:
+
+```
+conda env create -f environment.yaml
+conda activate cellflow
+```
+
+
 ## 🗃️ Usage
 ### Step1: Prepare data
 Take [MHIST](https://bmirds.github.io/MHIST) data for example:<br/>
@@ -59,23 +69,6 @@ python main_transflow.py
 --out_channels=2
 --timestep_respacing='ddim100'
 --amount=10 
-```
-
-
-## 📍 Acknowledgements
-This implementation is based on / inspired by:<br/>
-[openai/guided-diffusion](https://github.com/openai/guided-diffusion)<br/>
-[openai/improved-diffusion](https://github.com/openai/improved-diffusion)<br/>
-[suxuann/ddib](https://github.com/suxuann/ddib)
-
-
-## 🗄️ Enviroments
-A suitable [conda](https://conda.io/) environment named `cellflow` can be created
-and activated with:
-
-```
-conda env create -f environment.yaml
-conda activate cellflow
 ```
 
 
@@ -124,3 +117,10 @@ conda activate cellflow
 | ViT-based              | ViT, SwinT                                                         |
 | Hybrid-based           | Conformer, CrossFormer                                             |
 | Foundation Model-based | Virchow2, UNI                                                      |
+
+
+## 📍 Acknowledgements
+This implementation is based on / inspired by:<br/>
+[openai/guided-diffusion](https://github.com/openai/guided-diffusion)<br/>
+[openai/improved-diffusion](https://github.com/openai/improved-diffusion)<br/>
+[suxuann/ddib](https://github.com/suxuann/ddib)
