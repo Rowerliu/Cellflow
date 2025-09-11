@@ -118,9 +118,9 @@ conda activate cellflow
 
 ### Employ [Unpuzzle](https://github.com/Puzzle-Logic/UnPuzzle) framework for classification backbones:
 
-| Architecture     | Model                                                              |
-|:-----------------|:-------------------------------------------------------------------|
-| CNN-based        | VGG16, VGG19, ResNet, Inception, Xception, MobileNet, EfficientNet |
-| ViT-based        | ViT, SwinT                                                         |
-| Hybrid           | Conformer, CrossFormer                                             |
-| Foundation Model | Virchow2, UNI                                                      |
+| Architecture           | Model                                                              |
+|:-----------------------|:-------------------------------------------------------------------|
+| CNN-based              | VGG16, VGG19, ResNet, Inception, Xception, MobileNet, EfficientNet |
+| ViT-based              | ViT, SwinT                                                         |
+| Hybrid-based           | Conformer, CrossFormer                                             |
+| Foundation Model-based | Virchow2, UNI                                                      |
