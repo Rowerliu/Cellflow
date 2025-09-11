@@ -104,3 +104,13 @@ conda activate cellflow
 | FMix        | [FMix: Enhancing Mixed Sample Data Augmentation](https://arxiv.org/abs/2002.12047)                                               | [link](https://github.com/ecs-vlc/FMix)                   |
 | ResizeMix   | [ResizeMix: Mixing Data with Preserved Object Information and True Labels](https://arxiv.org/abs/2012.11101)                     | Null                                                      |
 | SaliencyMix | [SaliencyMix: A Saliency Guided Data Augmentation Strategy for Better Regularization](https://arxiv.org/abs/2006.01791)          | [link](https://github.com/SaliencyMix/SaliencyMix)        |
+
+
+### The comparison generative methods are listed here:
+
+| Method      | Paper                                                                                                     | Codelink                                                |
+|:------------|:----------------------------------------------------------------------------------------------------------|:--------------------------------------------------------|
+| StyleGAN    | [Stylegan-xl: Scaling stylegan to large diverse datasets](https://arxiv.org/abs/2202.00273)               | [link](https://github.com/autonomousvision/stylegan-xl) |
+| ADM         | [Diffusion models beat gans on image synthesis](https://arxiv.org/abs/2105.05233)                         | [link](https://github.com/openai/guided-diffusion)      |
+| LDM         | [High-Resolution Image Synthesis with Latent Diffusion Models](https://arxiv.org/abs/2112.10752)          | [link](https://github.com/CompVis/latent-diffusion)     |
+| DiT         | [Scalable Diffusion Models with Transformers](https://arxiv.org/abs/2212.09748)                           | [link](https://github.com/facebookresearch/DiT)         |
