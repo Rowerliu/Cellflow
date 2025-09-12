@@ -52,10 +52,11 @@ MHIST
 ```
 
 ### Step2: Diffusion model training
-1. Prepare your data<br/>
-2. Follow the [guided-diffusion](https://github.com/openai/guided-diffusion)<br/>
-3. Take MHIST data for example:<br/>
-   'Class_cond = True', 'num_classes = 2'<br/>
+Follow the [guided-diffusion](https://github.com/openai/guided-diffusion), and train the Diffusion & Classifier model<br/>
+```
+Class_cond = True,
+num_classes = 2
+```
 
 ### Step 3: Progressive data generation
 Assign the path of trained models, and then generate intermediate images<br/>
