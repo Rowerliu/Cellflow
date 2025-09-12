@@ -124,3 +124,7 @@ This implementation is based on / inspired by:<br/>
 [openai/guided-diffusion](https://github.com/openai/guided-diffusion)<br/>
 [openai/improved-diffusion](https://github.com/openai/improved-diffusion)<br/>
 [suxuann/ddib](https://github.com/suxuann/ddib)
+
+
+## 📌 Reference
+<Liu et al. Cellflow: Advancing pathological image augmentation from spatial views to temporal trajectories (2025)>
