@@ -5,6 +5,9 @@
 [Zeyu Liu](https://github.com/Rowerliu), Tianyi Zhang, Yufang He, Bo Wen, Haoran Guo, Peng Zhang, Chenbin Ma, Shangqing Lyu, Yunlu Feng, Yu Zhao, Yueming Jin, Dachun Zhao, Guanglei Zhang<br/>
 [GitHub](https://github.com/Rowerliu/Cellflow)
 
+<div align="center">
+<img src="assets/Cellflow.png" height="300" />
+</div>
 
 ## 📇 Overview
 Deep learning has advanced pathological image analysis but remains constrained by limited annotated data, 
